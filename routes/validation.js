@@ -21,5 +21,14 @@ const loginValidation = (data) => {
   return schema.validate(data)
 }
 
+const newAuthorValidation = (data) => {
+  console.log('data', data)
+  const schema = Joi.object({
+    name: Joi.string().required()
+  })
+  return schema.validate(data)
+}
+
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
+module.exports.newAuthorValidation = newAuthorValidation;

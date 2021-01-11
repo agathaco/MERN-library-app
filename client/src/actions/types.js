@@ -13,3 +13,9 @@ export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 export const PROFILE_ERROR = 'PROFILE_ERROR';
 export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
+export const GET_AUTHOR = 'GET_AUTHOR';
+export const GET_AUTHORS = 'GET_AUTHORS';
+export const AUTHOR_ERROR = 'AUTHOR_ERROR';
+export const ADD_AUTHOR = 'ADD_AUTHOR';
+export const DELETE_AUTHOR = 'DELETE_AUTHOR';
+
