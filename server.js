@@ -17,6 +17,7 @@ app.use(express.json())
 // OR
 // const bodyParser = require('body-parser');
 // app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({limit:'10mb', extended: false}))
 
 // set up routes
 app.use('/api/', require('./routes/index'))

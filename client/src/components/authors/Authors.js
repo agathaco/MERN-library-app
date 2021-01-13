@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { getAuthors } from '../../actions/author';
 
 
-const Authors = ({ getAuthors, author: { authors } }) => {
+const Authors = ({ getAuthors, authors: { authors } }) => {
   useEffect(() => {
     getAuthors();
   }, [getAuthors]);
@@ -14,8 +14,8 @@ const Authors = ({ getAuthors, author: { authors } }) => {
     <Fragment>
       <h2>All authors </h2>
         <div className="authors">
-        {authors.map((author) => (
-          <div>{author.name}</div>
+        {authors.map((author, index) => (
+          <Link to={`/authors/${author._id}`} key={index}>{author.name}</Link>
         ))}
       </div>
       <Link to="/new-author">New Author</Link>
@@ -25,12 +25,12 @@ const Authors = ({ getAuthors, author: { authors } }) => {
 
 Authors.propTypes = {
   getAuthors: PropTypes.func.isRequired,
-  author: PropTypes.object.isRequired
+  authors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
   return {
-    author: state.author
+    authors: state.authors
   }
 };
 

@@ -13,7 +13,31 @@ router.get('/', verifyToken, async (req, res) => {
     res.send(authors);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({msg: 'Server Error'});
+  }
+});
+
+// @route    GET api/authors/:id
+// @desc     Get author by ID
+// @access   Private
+router.get('/:id', verifyToken, async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id);
+    
+    if (!author) {
+      return res.status(404).json({ msg: 'Author not found' })
+    }
+
+    res.json(author);
+  } catch (err) {
+    console.error(err.message);
+
+    // check for invalid ObjectId so we don't get a server error
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'Author not found' })
+    }
+
+    res.status(500).json({msg: 'Server Error'});
   }
 });
 
@@ -34,10 +58,33 @@ router.post(
       res.send(author);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server Error');
+      res.status(500).json({msg: 'Server Error'});
     }
   }
 );
+
+// @route    DELETE api/authors/:id
+// @desc     Delete an author
+// @access   Private
+router.delete('/:id', verifyToken, async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id);
+
+    if (!author) {
+      return res.status(404).json({ msg: 'Author not found' });
+    }
+
+    await author.remove();
+
+    res.json({ msg: 'Post removed' });
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({ msg: 'Author not found' })
+    }
+    return res.status(500).json({ msg: 'Server Error' });
+  }
+});
 
 // All Authors Route
 // router.get('/', (req, res) => {

@@ -13,6 +13,7 @@ import Profile from './components/profile/Profile';
 import EditProfile from "./components/profile/EditProfile";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import Authors from "./components/authors/Authors";
+import Author from "./components/authors/Author";
 import NewAuthor from "./components/authors/NewAuthor";
 
 import setAuthToken from './utils/setAuthToken';
@@ -45,10 +46,11 @@ const App = () => {
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/" component={Landing} />
-              <Route exact path="/profile/:id" component={Profile} />
+              <PrivateRoute exact path="/profile/:id" component={Profile} />
               <PrivateRoute exact path="/edit-profile" component={EditProfile} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/authors" component={Authors} />
+              <PrivateRoute exact path="/authors/:id" component={Author} />
               <PrivateRoute exact path="/new-author" component={NewAuthor} />
               <Route component={NotFound} />
             </Switch>

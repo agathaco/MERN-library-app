@@ -4,6 +4,8 @@ import { setAlert } from './alert';
 import {
   GET_AUTHOR,
   GET_AUTHORS,
+  ADD_AUTHOR,
+  DELETE_AUTHOR,
   AUTHOR_ERROR
 } from './types';
 
@@ -27,6 +29,7 @@ export const getAuthors = () => async dispatch => {
 
 // Get author by ID
 export const getAuthorById = authorId => async dispatch => {
+  console.log('get author by id', authorId)
   try {
     const res = await axios.get(`/api/authors/${authorId}`);
 
@@ -35,6 +38,7 @@ export const getAuthorById = authorId => async dispatch => {
       payload: res.data
     });
   } catch (error) {
+    console.log(error)
     dispatch({
       type: AUTHOR_ERROR,
       // to do: test errors
@@ -49,7 +53,7 @@ export const addAuthor = (formData, history) => async dispatch => {
     const res = await axios.post('api/authors', formData);
 
     dispatch({
-      type: GET_AUTHOR,
+      type: ADD_AUTHOR,
       payload: res.data
     });
 
@@ -57,9 +61,7 @@ export const addAuthor = (formData, history) => async dispatch => {
     history.push('/authors');
 
   } catch (error) {
-    // to do: test errors
     console.error(error)
-
 
     if (error.response.data) dispatch(setAlert(error.response.data, 'danger'))
 
@@ -72,5 +74,23 @@ export const addAuthor = (formData, history) => async dispatch => {
 
 
 // Delete author
-export const deleteAuthor = () => async dispatch => {
+export const deleteAuthor = (id, history) => async dispatch => {
+  console.log('deleting author')
+  try {
+    await axios.delete(`/api/authors/${id}`);
+
+    dispatch({
+      type: DELETE_AUTHOR,
+      payload: id
+    });
+
+    dispatch(setAlert('Author has been deleted', 'success'));
+    history.push('/authors');
+
+  } catch (err) {
+    dispatch({
+      type: AUTHOR_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
 };
