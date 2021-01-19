@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const verifyToken = require('../middleware/verifyToken');
 const { newAuthorValidation } = require('./validation');
-const Author = require('../models/author')
+const Author = require('../models/author');
 
 // @route    GET api/authors
 // @desc     Get all authors
@@ -42,20 +42,34 @@ router.get('/:id', verifyToken, async (req, res) => {
 });
 
 // @route    POST api/authors
-// @desc     Create an author
+// @desc     Create or Update an author
 // @access   Private
 router.post(
   '/',
   verifyToken,
   async (req, res) => {
     const { error } = newAuthorValidation(req.body)
-    if (error) return res.status(400).send(error.details[0].message)
+    if (error) {
+      return res.status(400).send(error.details[0].message)
+    }
     try {
-      const newAuthor = new Author({
-        name: req.body.name
-      });
-      const author = await newAuthor.save();
-      res.send(author);
+      let savedAuthor = {};
+      if (req.body.id) {
+        const author = await Author.findOne({_id: req.body.id})
+        if (author) {
+          // Update author
+          savedAuthor = await Author.findOneAndUpdate({_id: req.body.id}, {$set: {"name":req.body.name}}, {new: true})
+        } else {
+          res.status(500).json({msg: 'Author not found'});
+        }
+      } else {
+        // Create author
+        const newAuthor = new Author({
+          name: req.body.name
+        });
+        savedAuthor = await newAuthor.save();
+      }
+      res.send(savedAuthor);
     } catch (err) {
       console.error(err.message);
       res.status(500).json({msg: 'Server Error'});

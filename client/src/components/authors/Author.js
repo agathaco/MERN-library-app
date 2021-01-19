@@ -20,7 +20,8 @@ const Author = ({ getAuthorById, deleteAuthor, authors:{author}, match, history 
     ) : (
     <Fragment>
       <h2>{author.name}</h2>
-      <button onClick={console.log('edit')}>Edit</button>
+      <Link to={`/authors/edit/${author._id}`}>Edit</Link>
+
       <button onClick={handleAuthorDelete}>Delete</button>
       <Link to="/authors">Back to authors</Link>
     </Fragment>

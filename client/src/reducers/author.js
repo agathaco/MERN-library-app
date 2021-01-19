@@ -3,7 +3,8 @@ import {
   GET_AUTHORS,
   AUTHOR_ERROR,
   ADD_AUTHOR,
-  DELETE_AUTHOR
+  DELETE_AUTHOR,
+  CLEAR_AUTHOR
 } from '../actions/types';
 
 const initialState = {
@@ -24,7 +25,6 @@ export default function(state = initialState, action) {
         loading: false
       };
     case GET_AUTHOR:
-      console.log(payload)
 
       return {
         ...state,
@@ -37,16 +37,22 @@ export default function(state = initialState, action) {
         authors: [payload, ...state.authors],
         loading: false
       };
-    case DELETE_AUTHOR:
-      return {
-        ...state,
-        authors: state.authors.filter(author => author._id !== payload),
-        loading: false
-      };
     case AUTHOR_ERROR:
       return {
         ...state,
         error: payload,
+        loading: false
+      };
+    case CLEAR_AUTHOR:
+      return {
+        ...state,
+        author: null,
+        loading: false
+      };
+    case DELETE_AUTHOR:
+      return {
+        ...state,
+        authors: state.authors.filter(author => author._id !== payload),
         loading: false
       };
     default:

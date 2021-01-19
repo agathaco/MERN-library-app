@@ -15,10 +15,10 @@ const Authors = ({ getAuthors, authors: { authors } }) => {
       <h2>All authors </h2>
         <div className="authors">
         {authors.map((author, index) => (
-          <Link to={`/authors/${author._id}`} key={index}>{author.name}</Link>
+          <div><Link to={`/authors/${author._id}`} key={index}>{author.name}</Link></div>
         ))}
       </div>
-      <Link to="/new-author">New Author</Link>
+      <Link to="/new-author" className="btn btn-dark">New Author</Link>
     </Fragment>
   )
 }

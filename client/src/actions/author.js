@@ -6,11 +6,14 @@ import {
   GET_AUTHORS,
   ADD_AUTHOR,
   DELETE_AUTHOR,
+  CLEAR_AUTHOR,
   AUTHOR_ERROR
 } from './types';
 
 // Get all authors
 export const getAuthors = () => async dispatch => {
+  dispatch({ type: CLEAR_AUTHOR });
+
   try {
     const res = await axios.get('api/authors');
 
@@ -29,16 +32,15 @@ export const getAuthors = () => async dispatch => {
 
 // Get author by ID
 export const getAuthorById = authorId => async dispatch => {
-  console.log('get author by id', authorId)
   try {
     const res = await axios.get(`/api/authors/${authorId}`);
+
 
     dispatch({
       type: GET_AUTHOR,
       payload: res.data
     });
   } catch (error) {
-    console.log(error)
     dispatch({
       type: AUTHOR_ERROR,
       // to do: test errors
@@ -48,17 +50,25 @@ export const getAuthorById = authorId => async dispatch => {
 };
 
 // Add or update author
-export const addAuthor = (formData, history) => async dispatch => {
+export const addUpdateAuthor = (formData, history, edit = false) => async dispatch => {
   try {
-    const res = await axios.post('api/authors', formData);
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    const res = await axios.post('api/authors', formData, config);
 
     dispatch({
       type: ADD_AUTHOR,
       payload: res.data
     });
 
-    dispatch(setAlert('Author added', 'success'));
+    dispatch(setAlert(edit ? 'Author Updated' : 'Author Created', 'success'));
     history.push('/authors');
+    dispatch({ type: CLEAR_AUTHOR });
+
 
   } catch (error) {
     console.error(error)
@@ -75,7 +85,6 @@ export const addAuthor = (formData, history) => async dispatch => {
 
 // Delete author
 export const deleteAuthor = (id, history) => async dispatch => {
-  console.log('deleting author')
   try {
     await axios.delete(`/api/authors/${id}`);
 

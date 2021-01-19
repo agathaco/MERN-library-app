@@ -18,4 +18,5 @@ export const GET_AUTHORS = 'GET_AUTHORS';
 export const AUTHOR_ERROR = 'AUTHOR_ERROR';
 export const ADD_AUTHOR = 'ADD_AUTHOR';
 export const DELETE_AUTHOR = 'DELETE_AUTHOR';
+export const CLEAR_AUTHOR = 'CLEAR_AUTHOR';
 

@@ -22,10 +22,9 @@ const loginValidation = (data) => {
 }
 
 const newAuthorValidation = (data) => {
-  console.log('data', data)
   const schema = Joi.object({
-    name: Joi.string().required()
-  })
+    name: Joi.string().required(),
+  }).unknown()
   return schema.validate(data)
 }
 

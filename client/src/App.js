@@ -14,7 +14,7 @@ import EditProfile from "./components/profile/EditProfile";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import Authors from "./components/authors/Authors";
 import Author from "./components/authors/Author";
-import NewAuthor from "./components/authors/NewAuthor";
+import AddEditAuthor from "./components/authors/AddEditAuthor";
 
 import setAuthToken from './utils/setAuthToken';
 import { loadUser } from './actions/auth';
@@ -51,7 +51,8 @@ const App = () => {
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/authors" component={Authors} />
               <PrivateRoute exact path="/authors/:id" component={Author} />
-              <PrivateRoute exact path="/new-author" component={NewAuthor} />
+              <PrivateRoute exact path="/authors/edit/:id" component={AddEditAuthor} />
+              <PrivateRoute exact path="/new-author" component={AddEditAuthor} />
               <Route component={NotFound} />
             </Switch>
           </section>
