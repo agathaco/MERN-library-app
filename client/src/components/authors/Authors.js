@@ -1,21 +1,35 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getAuthors } from '../../actions/author';
 
+import SearchBar from "../layout/Searchbar";
 
-const Authors = ({ getAuthors, authors: { authors } }) => {
+const Authors = ({ getAuthors, search, authors: { authors } }) => {
+
+const [displayedAuthors, setDisplayedAuthors] = useState([])
   useEffect(() => {
+    const getDisplayedAuthors = () => {
+      if (search.query) {
+        const filteredAuthors = authors.filter(author => author.name.toLowerCase().includes(search.query.toLowerCase()))
+        setDisplayedAuthors(filteredAuthors)
+      } else {
+        setDisplayedAuthors(authors)
+      }
+    }
     getAuthors();
-  }, [getAuthors]);
+    getDisplayedAuthors()
+  }, [getAuthors, authors, search]);
 
   return (
     <Fragment>
+      <h2>Search authors</h2>
+      <SearchBar/>
       <h2>All authors </h2>
         <div className="authors">
-        {authors.map((author, index) => (
-          <div><Link to={`/authors/${author._id}`} key={index}>{author.name}</Link></div>
+        {displayedAuthors.map((author, index) => (
+          <div key={index}><Link to={`/authors/${author._id}`} >{author.name}</Link></div>
         ))}
       </div>
       <Link to="/new-author" className="btn btn-dark">New Author</Link>
@@ -30,7 +44,8 @@ Authors.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    authors: state.authors
+    authors: state.authors,
+    search: state.search
   }
 };
 

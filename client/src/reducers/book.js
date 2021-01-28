@@ -1,81 +1,63 @@
 import {
-  GET_POSTS,
-  POST_ERROR,
-  UPDATE_LIKES,
-  DELETE_POST,
-  ADD_POST,
-  GET_POST,
-  ADD_COMMENT,
-  REMOVE_COMMENT
+  GET_BOOK,
+  GET_BOOKS,
+  BOOK_ERROR,
+  ADD_BOOK,
+  DELETE_BOOK,
+  CLEAR_BOOK
 } from '../actions/types';
 
 const initialState = {
-  posts: [],
-  post: null,
+  books: [],
+  book: null,
   loading: true,
   error: {}
 };
 
-export default function(state = initialState, action) {
+const bookReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_POSTS:
+    case GET_BOOKS:
       return {
         ...state,
-        posts: payload,
+        books: payload,
         loading: false
       };
-    case GET_POST:
+    case GET_BOOK:
+
       return {
         ...state,
-        post: payload,
+        book: payload,
         loading: false
       };
-    case ADD_POST:
+    case ADD_BOOK:
       return {
         ...state,
-        posts: [payload, ...state.posts],
+        books: [payload, ...state.books],
         loading: false
       };
-    case DELETE_POST:
-      return {
-        ...state,
-        posts: state.posts.filter(post => post._id !== payload),
-        loading: false
-      };
-    case POST_ERROR:
+    case BOOK_ERROR:
       return {
         ...state,
         error: payload,
         loading: false
       };
-    case UPDATE_LIKES:
+    case CLEAR_BOOK:
       return {
         ...state,
-        posts: state.posts.map(post =>
-          post._id === payload.id ? { ...post, likes: payload.likes } : post
-        ),
+        book: null,
         loading: false
       };
-    case ADD_COMMENT:
+    case DELETE_BOOK:
       return {
         ...state,
-        post: { ...state.post, comments: payload },
-        loading: false
-      };
-    case REMOVE_COMMENT:
-      return {
-        ...state,
-        post: {
-          ...state.post,
-          comments: state.post.comments.filter(
-            comment => comment._id !== payload
-          )
-        },
+        books: state.books.filter(book => book._id !== payload),
         loading: false
       };
     default:
       return state;
   }
 }
+
+export default bookReducer;

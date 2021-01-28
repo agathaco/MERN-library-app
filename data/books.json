@@ -1,0 +1,18 @@
+[
+  {
+  "title": "A Promised Land",
+  "author": "Barack Obama",
+  "publishDate": "11/17/2020",
+  "description": "A riveting, deeply personal account of history in the making—from the president who inspired us to believe in the power of democracy",
+  "genre": "Non Fiction",
+  "coverImageName":"https://prodimage.images-bn.com/pimages/9781524763169_p0_v2_s600x595.jpg"
+  },
+  {
+    "title": "A Time for Mercy",
+    "author": "John Grisham",
+    "publishDate": "10/13/2020",
+    "description": "Clanton, Mississippi. 1990. Jake Brigance finds himself embroiled in a deeply divisive trial when the court appoints him attorney for Drew Gamble, a timid sixteen-year-old boy accused of murdering a local deputy. Many in Clanton want a swift trial and the death penalty, but Brigance digs in and discovers that there is more to the story than meets the eye. Jake’s fierce commitment to saving Drew from the gas chamber puts his career, his financial security, and the safety of his family on the line.",
+    "genre": "Fiction",
+    "coverImageName":"https://prodimage.images-bn.com/pimages/9781524763169_p0_v2_s600x595.jpg"
+    }
+]

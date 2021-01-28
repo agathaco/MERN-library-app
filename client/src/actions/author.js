@@ -16,7 +16,6 @@ export const getAuthors = () => async dispatch => {
 
   try {
     const res = await axios.get('api/authors');
-
     dispatch({
       type: GET_AUTHORS,
       payload: res.data
@@ -29,12 +28,10 @@ export const getAuthors = () => async dispatch => {
   }
 };
 
-
 // Get author by ID
 export const getAuthorById = authorId => async dispatch => {
   try {
     const res = await axios.get(`/api/authors/${authorId}`);
-
 
     dispatch({
       type: GET_AUTHOR,
@@ -69,19 +66,14 @@ export const addUpdateAuthor = (formData, history, edit = false) => async dispat
     history.push('/authors');
     dispatch({ type: CLEAR_AUTHOR });
 
-
   } catch (error) {
-    console.error(error)
-
     if (error.response.data) dispatch(setAlert(error.response.data, 'danger'))
-
     dispatch({
       type: AUTHOR_ERROR,
       payload: { msg: error.response.statusText, status: error.response.status }
     });
   }
 };
-
 
 // Delete author
 export const deleteAuthor = (id, history) => async dispatch => {

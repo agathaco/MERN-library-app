@@ -5,21 +5,18 @@ const BookSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  author: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String
   },
   publishDate: {
     type: Date,
-    required: true
-  },
-  pageCount: {
-    type: Number,
-    required: true
   },
   genre: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Genre'
+    type: String
   },
   createdAt: {
     type: Date,
@@ -28,12 +25,6 @@ const BookSchema = new mongoose.Schema({
   },
   coverImageName: {
     type: String,
-    required: true
-  },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Author'
   }
 })
 

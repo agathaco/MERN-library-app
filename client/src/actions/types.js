@@ -13,10 +13,18 @@ export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 export const PROFILE_ERROR = 'PROFILE_ERROR';
 export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
+export const SEARCH = 'SEARCH';
 export const GET_AUTHOR = 'GET_AUTHOR';
 export const GET_AUTHORS = 'GET_AUTHORS';
 export const AUTHOR_ERROR = 'AUTHOR_ERROR';
 export const ADD_AUTHOR = 'ADD_AUTHOR';
 export const DELETE_AUTHOR = 'DELETE_AUTHOR';
 export const CLEAR_AUTHOR = 'CLEAR_AUTHOR';
+export const GET_BOOK = 'GET_BOOK';
+export const GET_BOOKS = 'GET_BOOKS';
+export const BOOK_ERROR = 'BOOK_ERROR';
+export const ADD_BOOK = 'ADD_BOOK';
+export const DELETE_BOOK = 'DELETE_BOOK';
+export const CLEAR_BOOK = 'CLEAR_BOOK';
+
 

@@ -11,11 +11,8 @@ const AddEditAuthor = ({authors:{author, loading}, addUpdateAuthor, history}) =>
   const { register, handleSubmit, setValue } = useForm();
 
   useEffect(() => {
-    if (!isAddMode) {
-      setValue('name', author.name)
-    }
-  }, []);
-
+    if (!isAddMode) setValue('name', author.name)
+  }, [isAddMode, setValue, author]);
 
   const onSubmit = data => {
     data.id = isAddMode ? null : author._id
