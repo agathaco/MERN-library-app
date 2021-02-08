@@ -11,13 +11,15 @@ const AddEditBook = ({books:{book, loading}, addUpdateBook, history}) => {
   const { register, handleSubmit, setValue } = useForm();
 
   useEffect(() => {
-    if (!isAddMode) setValue('title', book.title)
+    if (!isAddMode) {
+      const fields = ['title', 'author', 'description', 'genre', 'date'];
+      fields.forEach(field => setValue(field, book[field]));
+    }
   }, [setValue, isAddMode, book]);
 
 
   const onSubmit = data => {
     data.id = isAddMode ? null : book._id
-    console.log(data)
     addUpdateBook(data, history, book ? true : false)
   };
 

@@ -14,6 +14,7 @@ export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 export const PROFILE_ERROR = 'PROFILE_ERROR';
 export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
 export const SEARCH = 'SEARCH';
+export const CLEAR_SEARCH = 'CLEAR_SEARCH';
 export const GET_AUTHOR = 'GET_AUTHOR';
 export const GET_AUTHORS = 'GET_AUTHORS';
 export const AUTHOR_ERROR = 'AUTHOR_ERROR';

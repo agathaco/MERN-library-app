@@ -6,34 +6,40 @@ import { getBooks } from '../../actions/book';
 
 import SearchBar from "../layout/Searchbar";
 
-const Books = ({ getBooks, search, books: { books } }) => {
+const Books = ({ getBooks, search, books: { books, loading } }) => {
 
 const [displayedBooks, setDisplayedBooks] = useState([])
 
+useEffect(() => {
+  getBooks();
+}, [getBooks]);
+
   useEffect(() => {
-    const getDisplayedBooks = () => {
       if (search.query) {
-        const filteredBooks = books.filter(book => book.name.toLowerCase().includes(search.query.toLowerCase()))
+        const filteredBooks = books.filter(book => book.title.toLowerCase().includes(search.query.toLowerCase()))
         setDisplayedBooks(filteredBooks)
       } else {
         setDisplayedBooks(books)
       }
-    }
-    getBooks();
-    getDisplayedBooks();
-  }, [getBooks, search, books]);
+  }, [search.query, books]);
 
   return (
     <Fragment>
-      <h2>Search Books</h2>
-      <SearchBar/>
-      <h2>All Books </h2>
-        <div className="books">
-        {displayedBooks.map((book, index) => (
-          <div key={index}><Link to={`/books/${book._id}`} >{book.title} - {book.author}</Link></div>
-        ))}
-      </div>
-      <Link to="/new-book" className="btn btn-dark">Add Book</Link>
+      {loading ? (
+        <div>loading...</div>
+      ) : (
+      <Fragment>
+        <h2>Search Books</h2>
+        <SearchBar/>
+        <h2>All Books </h2>
+          <div className="books">
+          {displayedBooks.map((book, index) => (
+            <div key={index}><Link to={`/books/${book._id}`} >{book.title} - {book.author}</Link></div>
+          ))}
+        </div>
+        <Link to="/new-book" className="btn btn-dark">Add Book</Link>
+      </Fragment>
+      )}
     </Fragment>
   )
 }

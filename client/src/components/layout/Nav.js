@@ -15,7 +15,7 @@ const Navbar = ({ auth: {user, isAuthenticated, loading}, logout, history }) => 
         <Link to="/dashboard">Home</Link>
       </li>
       <li>
-        <Link to="/books">My Books</Link>
+        <Link to="/books">Books</Link>
       </li>
       <li>
         <Link to="/authors">Authors</Link>

@@ -1,12 +1,25 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { search } from '../../actions/search';
+import { search, clearSearch } from '../../actions/search';
 
-const Searchbar = ({search}) => {
+const Searchbar = ({ onSearch, clearSearch, search }) => {
+
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+   if (search.query) setInputValue(search.query)
+
+  }, [search]);
 
   const handleSearch = (e) => {
-    search(e.target.value)
+    const enteredValue = e.target.value
+    setInputValue(enteredValue)
+    onSearch(enteredValue)
+  }
+  const handleClearSearch = () => {
+    setInputValue('')
+    clearSearch()
   }
 
   return (
@@ -16,20 +29,31 @@ const Searchbar = ({search}) => {
           type="text"
           placeholder="Search for an author"
           onChange={event => handleSearch(event)}
+          className="searchbar"
+          value={inputValue}
         />
+        <span onClick={handleClearSearch}>x</span>
       </form>
     </Fragment>
   );
 };
 
 Searchbar.propTypes = {
-  search: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
+  clearSearch: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    search: (query) => dispatch(search(query))
+    onSearch: (query) => dispatch(search(query)),
+    clearSearch: () => dispatch(clearSearch())
   }
 }
 
-export default connect(null, mapDispatchToProps)(Searchbar);
+const mapStateToProps = (state) => {
+  return {
+    search: state.search
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Searchbar);

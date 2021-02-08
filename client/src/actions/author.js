@@ -21,6 +21,7 @@ export const getAuthors = () => async dispatch => {
       payload: res.data
     });
   } catch (error) {
+    console.log(error, error.response)
     dispatch({
       type: AUTHOR_ERROR,
       payload: { msg: error.response.statusText, status: error.response.status }

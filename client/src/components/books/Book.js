@@ -6,7 +6,6 @@ import { getBookById, deleteBook } from '../../actions/book';
 
 const Book = ({ getBookById, deleteBook, books:{ book }, match, history }) => {
   useEffect(() => {
-    console.log(match.params.id)
     getBookById(match.params.id);
   }, [getBookById, match]);
 
@@ -40,7 +39,6 @@ Book.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state)
   return {
     books: state.books
   }

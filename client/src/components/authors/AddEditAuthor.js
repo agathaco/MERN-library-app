@@ -16,7 +16,8 @@ const AddEditAuthor = ({authors:{author, loading}, addUpdateAuthor, history}) =>
 
   const onSubmit = data => {
     data.id = isAddMode ? null : author._id
-    addUpdateAuthor(data, history, author ? true : false)
+    console.log('saving author',author.name)
+    // addUpdateAuthor(data, history, author ? true : false)
   };
 
 

@@ -25,7 +25,6 @@ const authorReducer = (state = initialState, action) => {
         loading: false
       };
     case GET_AUTHOR:
-
       return {
         ...state,
         author: payload,

@@ -6,23 +6,28 @@ import { getAuthors } from '../../actions/author';
 
 import SearchBar from "../layout/Searchbar";
 
-const Authors = ({ getAuthors, search, authors: { authors } }) => {
+const Authors = ({ getAuthors, search, authors: { authors, loading } }) => {
 
 const [displayedAuthors, setDisplayedAuthors] = useState([])
+
   useEffect(() => {
-    const getDisplayedAuthors = () => {
-      if (search.query) {
-        const filteredAuthors = authors.filter(author => author.name.toLowerCase().includes(search.query.toLowerCase()))
-        setDisplayedAuthors(filteredAuthors)
-      } else {
-        setDisplayedAuthors(authors)
-      }
-    }
     getAuthors();
-    getDisplayedAuthors()
-  }, [getAuthors, authors, search]);
+  }, [getAuthors]);
+
+  useEffect(() => {
+    if (search.query) {
+      const filteredAuthors = authors.filter(author => author.name.toLowerCase().includes(search.query.toLowerCase()))
+      setDisplayedAuthors(filteredAuthors)
+    } else {
+      setDisplayedAuthors(authors)
+    }
+  }, [search.query, authors]);
 
   return (
+    <Fragment>
+    {loading ? (
+      <div>loading...</div>
+    ) : (
     <Fragment>
       <h2>Search authors</h2>
       <SearchBar/>
@@ -33,6 +38,8 @@ const [displayedAuthors, setDisplayedAuthors] = useState([])
         ))}
       </div>
       <Link to="/new-author" className="btn btn-dark">New Author</Link>
+    </Fragment>
+    )}
     </Fragment>
   )
 }
