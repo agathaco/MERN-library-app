@@ -55,12 +55,12 @@ router.post(
     }
     try {
       let savedAuthor = {};
-      const {id, name, bio} = req.body;
-      // const authorFields = {id, name, bio}
+      const {id, name, bio, genre, country} = req.body;
+      const authorFields = {id, name, bio, genre, country}
       const authorId = id ? id : new mongoose.Types.ObjectId();
       savedAuthor = await Author.findOneAndUpdate(
         {_id: authorId}, 
-        {$set: {name: name}}, 
+        {$set: authorFields},
         {new: true, upsert: true, setDefaultsOnInsert: true})
       res.send(savedAuthor);
     } catch (err) {

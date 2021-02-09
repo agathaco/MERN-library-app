@@ -22,8 +22,10 @@ const Author = ({ getAuthorById, deleteAuthor, authors:{author}, match, history 
     ) : (
     <Fragment>
       <h2>{author.name}</h2>
+      <p>{author.genre}</p>
+      <p>{author.bio}</p>
       <h3>Books</h3>
-      <p>Books from this author</p>
+      <p>Books by this author</p>
       <Link to={`/authors/edit/${author._id}`}>Edit</Link>
       <button onClick={handleAuthorDelete}>Delete</button>
       <Link to="/authors">Back to authors</Link>
@@ -35,8 +37,7 @@ const Author = ({ getAuthorById, deleteAuthor, authors:{author}, match, history 
 
 Author.propTypes = {
   getAuthorById: PropTypes.func.isRequired,
-  deleteAuthor: PropTypes.func.isRequired,
-  author: PropTypes.object.isRequired
+  deleteAuthor: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {

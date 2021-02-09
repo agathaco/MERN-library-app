@@ -85,7 +85,6 @@ router.post(
       let savedBook = {};
       const {id, title, author, description, publishDate, genre, coverImage} = req.body;
       const bookFields = {id, title, author, description, publishDate, genre, coverImage}
-      console.log(88, bookFields)
       const bookId = id ? id : new mongoose.Types.ObjectId();
       // TO DO: SAVE AUTHOR IF NEW
       savedBook = await Book.findOneAndUpdate(

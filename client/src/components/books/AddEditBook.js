@@ -4,8 +4,9 @@ import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addUpdateBook} from '../../actions/book';
+import { setAlert } from '../../actions/alert';
 
-const AddEditBook = ({books:{book, loading}, addUpdateBook, history}) => {
+const AddEditBook = ({books:{book, books, loading}, addUpdateBook, history}) => {
 
   const isAddMode = book ? !book._id : true;
   const { register, handleSubmit, setValue } = useForm();
@@ -20,7 +21,14 @@ const AddEditBook = ({books:{book, loading}, addUpdateBook, history}) => {
 
   const onSubmit = data => {
     data.id = isAddMode ? null : book._id
-    addUpdateBook(data, history, book ? true : false)
+    const doesBookExist = books.find(author => book.title === data.title)
+    if (doesBookExist && isAddMode) {
+      setAlert('This book already exists', 'danger')
+    } else if ((doesBookExist && !isAddMode && doesBookExist._id !== data.id)) {
+      setAlert('This book already exists', 'danger')
+    } else {
+      addUpdateBook(data, history, book ? true : false)
+    }
   };
 
 
@@ -47,6 +55,7 @@ const AddEditBook = ({books:{book, loading}, addUpdateBook, history}) => {
 
 AddEditBook.propTypes = {
   addUpdateBook: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -55,4 +64,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps, { addUpdateBook })(withRouter(AddEditBook));
+export default connect(mapStateToProps, { addUpdateBook, setAlert })(withRouter(AddEditBook));
