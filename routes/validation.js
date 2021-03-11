@@ -29,10 +29,9 @@ const newAuthorValidation = (data) => {
 }
 
 const newBookValidation = (data) => {
-  console.log('data', data)
   const schema = Joi.object({
     title: Joi.string().required(),
-    author: Joi.string().required(),
+    author: Joi.object().required(),
   }).unknown()
   return schema.validate(data)
 }

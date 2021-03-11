@@ -5,15 +5,18 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getAuthorById, deleteAuthor } from '../../actions/author';
+import { getBooks } from '../../actions/book';
 
-const Author = ({ getAuthorById, deleteAuthor, authors:{author}, match, history }) => {
+const Author = ({ getAuthorById, deleteAuthor, getBooks, authors:{author}, match, history }) => {
   useEffect(() => {
     getAuthorById(match.params.id);
-  }, [getAuthorById, match]);
+    getBooks()
+  }, [getAuthorById, match, getBooks]);
 
   const handleAuthorDelete = () => {
     deleteAuthor(author._id, history)
   }
+
 
   return (
   <Fragment>
@@ -37,15 +40,17 @@ const Author = ({ getAuthorById, deleteAuthor, authors:{author}, match, history 
 
 Author.propTypes = {
   getAuthorById: PropTypes.func.isRequired,
-  deleteAuthor: PropTypes.func.isRequired
+  deleteAuthor: PropTypes.func.isRequired,
+  getBooks: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
+  console.log(state)
   return {
     authors: state.authors
   }
 };
 
 
-export default connect(mapStateToProps, { getAuthorById, deleteAuthor })(Author);
+export default connect(mapStateToProps, { getAuthorById, deleteAuthor, getBooks })(Author);
 

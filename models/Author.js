@@ -8,8 +8,7 @@ const AuthorSchema = new mongoose.Schema({
   bio: String,
   genre: String,
   country: String,
-  website: String,
-  books: Array
+  website: String
 })
 
-module.exports = mongoose.model('author', AuthorSchema);
+module.exports = mongoose.model('Author', AuthorSchema);

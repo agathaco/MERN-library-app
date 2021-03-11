@@ -13,7 +13,6 @@ import {
 // Get all authors
 export const getAuthors = () => async dispatch => {
   dispatch({ type: CLEAR_AUTHOR });
-
   try {
     const res = await axios.get('api/authors');
     dispatch({

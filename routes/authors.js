@@ -3,7 +3,7 @@ const router = express.Router()
 const mongoose = require('mongoose');
 const verifyToken = require('../middleware/verifyToken');
 const { newAuthorValidation } = require('./validation');
-const Author = require('../models/author');
+const Author = require('../models/Author');
 
 // @route    GET api/authors
 // @desc     Get all authors

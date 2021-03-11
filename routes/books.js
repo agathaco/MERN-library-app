@@ -1,10 +1,10 @@
-const express = require('express')
-const router = express.Router()
-const mongoose = require('mongoose');
-const verifyToken = require('../middleware/verifyToken')
-const { newBookValidation } = require('./validation')
-const Book = require('../models/book')
-const Author = require('../models/author')
+const express = require("express");
+const router = express.Router();
+const mongoose = require("mongoose");
+const verifyToken = require("../middleware/verifyToken");
+const { newBookValidation } = require("./validation");
+const Book = require("../models/Book");
+const Author = require("../models/Author");
 // const multer = require('multer')
 // const path = require('path')
 // const fs = require('fs')
@@ -16,111 +16,134 @@ const Author = require('../models/author')
 //     callback(null, imageMimeTypes.includes(file.mimetype))
 //   }
 // })
-const booksData = require('../data/books.json');
-
+const booksData = require("../data/books.json");
 
 // @route    GET api/books
 // @desc     Get all books
 // @access   Public
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const books = await Book.find();
+    const books = await Book.find().populate("author", "name");
     if (books.length) res.send(books);
     if (!books.length) {
-       // no books in the database yet
+      // no books in the database yet
       // let's import them fron the books.json files
-      const insertBooks = await Book.insertMany(booksData)
+      const insertBooks = await Book.insertMany(booksData);
       // const newBooks = await Book.find();
       // saving new authors
-      insertBooks.forEach(async book => {
-        const author = await Author.findOne({name: book.author})
+      insertBooks.forEach(async (book) => {
+        const author = await Author.findOne({ name: book.author });
         if (!author) {
           const newAuthor = new Author({
-            name: book.author
-          })
-          newAuthor.save()
-        };
-      })
-      res.send(insertBooks)
+            name: book.author,
+          });
+          newAuthor.save();
+        }
+      });
+      res.send(insertBooks);
     }
-    
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
 // @route    GET api/book/:id
 // @desc     Get book by ID
 // @access   Public
-router.get('/:id',  async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
-    if (!book) return res.status(404).send('Book not found')
+    if (!book) return res.status(404).send("Book not found");
     res.send(book);
   } catch (err) {
     console.error(err.message);
 
     // check for invalid ObjectId so we don't get a server error
-    if (err.kind === 'ObjectId') {
-      return res.status(404).send('Book not found')
+    if (err.kind === "ObjectId") {
+      return res.status(404).send("Book not found");
     }
 
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
 // @route    POST api/books
 // @desc     Create or Update a book
 // @access   Private
-router.post(
-  '/',
-  verifyToken,
-  async (req, res) => {
-    const { error } = newBookValidation(req.body)
-    if (error) {
-      return res.status(400).send(error.details[0].message)
-    }
-    try {
-      let savedBook = {};
-      const {id, title, author, description, publishDate, genre, coverImage} = req.body;
-      const bookFields = {id, title, author, description, publishDate, genre, coverImage}
-      const bookId = id ? id : new mongoose.Types.ObjectId();
-      // TO DO: SAVE AUTHOR IF NEW
-      savedBook = await Book.findOneAndUpdate(
-        {_id: bookId}, 
-        {$set: bookFields}, 
-        {new: true, upsert: true, setDefaultsOnInsert: true }
-        )
-      res.send(savedBook);
-      console.log('saved book', savedBook)
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
-    }
+router.post("/", verifyToken, async (req, res) => {
+  console.log("updating book");
+  const { error } = newBookValidation(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
   }
-);
+  try {
+    const {
+      id,
+      title,
+      author,
+      description,
+      publishDate,
+      genre,
+      coverImage,
+    } = req.body;
+
+    let authorId = author.value;
+
+    // CHECK IF AUTHOR IS NEW
+    if (author.__isNew__) {
+      const bookAuthor = await Author.findOne({ name: author.label })
+      if (!bookAuthor) {
+        const newAuthor = new Author({
+          name: author.label
+        })
+        authorId = newAuthor._id;
+        newAuthor.save()
+      }
+    }
+
+    const bookFields = {
+      id,
+      title,
+      author: authorId,
+      description,
+      publishDate,
+      genre,
+      coverImage,
+    };
+    const bookId = id ? id : new mongoose.Types.ObjectId();
+    const savedBook = await Book.findOneAndUpdate(
+      { _id: bookId },
+      { $set: bookFields },
+      { new: true, upsert: true, setDefaultsOnInsert: true, useFindAndModify: false }
+    );
+    res.send(savedBook);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 // @route    DELETE api/books/:id
 // @desc     Delete a book
 // @access   Private
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
 
     if (!book) {
-      return res.status(404).send('Book not found');
+      return res.status(404).send("Book not found");
     }
 
     await book.remove();
 
-    res.send('Book has been removed');
+    res.send("Book has been removed");
   } catch (err) {
     console.error(err.message);
-    if (err.kind === 'ObjectId') {
-      return res.status(404).send('Book not found')
+    if (err.kind === "ObjectId") {
+      return res.status(404).send("Book not found");
     }
-    return res.status(500).send('Server Error');
+    return res.status(500).send("Server Error");
   }
 });
 
@@ -159,4 +182,4 @@ router.delete('/:id', verifyToken, async (req, res) => {
 //   }
 // })
 
-module.exports = router
+module.exports = router;
