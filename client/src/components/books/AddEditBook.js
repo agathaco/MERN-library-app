@@ -6,28 +6,38 @@ import { connect } from "react-redux";
 import { addUpdateBook } from "../../actions/book";
 import { setAlert } from "../../actions/alert";
 import { getAuthors } from "../../actions/author";
+import { getGenres } from "../../actions/genre";
 
-import Creatable, { makeCreatableSelect } from "react-select/creatable";
-import Select from "react-select";
+import Creatable from "react-select/creatable";
 
 const AddEditBook = ({
   books: { book, books, loading },
   authors: { authors },
+  genres: { genres },
   getAuthors,
+  getGenres,
   addUpdateBook,
   history,
 }) => {
   const isAddMode = book ? !book._id : true;
   const { register, handleSubmit, setValue, control } = useForm();
-  const [ authorOptions, setAuthorOptions ] = useState([]);
+  const [authorOptions, setAuthorOptions] = useState([]);
+  const [genreOptions, setGenreOptions] = useState([]);
 
   useEffect(() => {
     if (!isAddMode) {
       const fields = ["title", "author", "description", "genre", "date"];
       fields.forEach((field) => {
         if (field === "author") {
-          const currentAuthor = authorOptions.find(authorOption => authorOption.value === book.author)
-          setValue(field, currentAuthor)
+          const currentAuthor = authorOptions.find(
+            (authorOption) => authorOption.value === book.author
+          );
+          setValue(field, currentAuthor);
+        } else if (field === "genre") {
+          const currentGenre = genreOptions.find(
+            (genreOption) => genreOption.value === book.genre
+          );
+          setValue(field, currentGenre);
         } else {
           setValue(field, book[field]);
         }
@@ -40,6 +50,10 @@ const AddEditBook = ({
   }, [getAuthors]);
 
   useEffect(() => {
+    getGenres();
+  }, [getGenres]);
+
+  useEffect(() => {
     const options = authors.map((author) => {
       return {
         value: author._id,
@@ -47,21 +61,24 @@ const AddEditBook = ({
       };
     });
     setAuthorOptions(options);
-
-
-
   }, [authors]);
+
+  useEffect(() => {
+    const options = genres.map((genre) => {
+      return {
+        value: genre._id,
+        label: genre.name,
+      };
+    });
+    setGenreOptions(options);
+  }, [genres]);
 
   const onSubmit = (data) => {
     data.id = isAddMode ? null : book._id;
     const doesBookExist = books.find((book) => book.title === data.title);
     if (doesBookExist && isAddMode) {
       setAlert("This book already exists", "danger");
-    } else if (
-      doesBookExist &&
-      !isAddMode &&
-      doesBookExist._id !== data.id
-    ) {
+    } else if (doesBookExist && !isAddMode && doesBookExist._id !== data.id) {
       setAlert("This book already exists", "danger");
     } else {
       addUpdateBook(data, history, book ? true : false);
@@ -84,7 +101,12 @@ const AddEditBook = ({
         <label>Description</label>
         <input type="text" name="description" ref={register}></input>
         <label>Genre</label>
-        <input type="text" name="genre" ref={register}></input>
+        <Controller
+          as={Creatable}
+          options={genreOptions}
+          name="genre"
+          control={control}
+        />
         <label>Publish Date</label>
         <input type="text" name="date" ref={register}></input>
         <Link to="/books">Cancel</Link>
@@ -97,6 +119,7 @@ const AddEditBook = ({
 AddEditBook.propTypes = {
   addUpdateBook: PropTypes.func.isRequired,
   getAuthors: PropTypes.func.isRequired,
+  getGenres: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 };
 
@@ -104,6 +127,7 @@ const mapStateToProps = (state) => {
   return {
     books: state.books,
     authors: state.authors,
+    genres: state.genres,
   };
 };
 
@@ -111,4 +135,5 @@ export default connect(mapStateToProps, {
   addUpdateBook,
   setAlert,
   getAuthors,
+  getGenres,
 })(withRouter(AddEditBook));

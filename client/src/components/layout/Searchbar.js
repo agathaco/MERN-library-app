@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { search, clearSearch } from '../../actions/search';
 
-const Searchbar = ({ onSearch, clearSearch, search }) => {
+const Searchbar = ({ onSearch, clearSearch, search, placeholder }) => {
 
   const [inputValue, setInputValue] = useState("");
 
@@ -22,12 +22,14 @@ const Searchbar = ({ onSearch, clearSearch, search }) => {
     clearSearch()
   }
 
+  const defaultText = placeholder ? placeholder : "Search"
+
   return (
     <Fragment>
       <form className="form">
         <input
           type="text"
-          placeholder="Search for an author"
+          placeholder={defaultText}
           onChange={event => handleSearch(event)}
           className="searchbar"
           value={inputValue}

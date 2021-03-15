@@ -5,6 +5,7 @@ const verifyToken = require("../middleware/verifyToken");
 const { newBookValidation } = require("./validation");
 const Book = require("../models/Book");
 const Author = require("../models/Author");
+const Genre = require("../models/Genre");
 // const multer = require('multer')
 // const path = require('path')
 // const fs = require('fs')
@@ -72,7 +73,6 @@ router.get("/:id", async (req, res) => {
 // @desc     Create or Update a book
 // @access   Private
 router.post("/", verifyToken, async (req, res) => {
-  console.log("updating book");
   const { error } = newBookValidation(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
@@ -89,6 +89,7 @@ router.post("/", verifyToken, async (req, res) => {
     } = req.body;
 
     let authorId = author.value;
+    let genreId = genre.value;
 
     // CHECK IF AUTHOR IS NEW
     if (author.__isNew__) {
@@ -102,15 +103,28 @@ router.post("/", verifyToken, async (req, res) => {
       }
     }
 
+    // CHECK IF GENRE IS NEW
+    if (genre.__isNew__) {
+      const bookGenre = await Genre.findOne({ name: genre.label })
+      if (!bookGenre) {
+        const newGenre = new Genre({
+          name: genre.label
+        })
+        genreId = newGenre._id;
+        newGenre.save()
+      }
+    }
+
     const bookFields = {
       id,
       title,
       author: authorId,
+      genre: genreId,
       description,
       publishDate,
-      genre,
       coverImage,
     };
+
     const bookId = id ? id : new mongoose.Types.ObjectId();
     const savedBook = await Book.findOneAndUpdate(
       { _id: bookId },

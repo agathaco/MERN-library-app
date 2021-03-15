@@ -27,5 +27,11 @@ export const BOOK_ERROR = 'BOOK_ERROR';
 export const ADD_BOOK = 'ADD_BOOK';
 export const DELETE_BOOK = 'DELETE_BOOK';
 export const CLEAR_BOOK = 'CLEAR_BOOK';
+export const GET_GENRE = 'GET_GENRE';
+export const GET_GENRES = 'GET_GENRES';
+export const GENRE_ERROR = 'GENRE_ERROR';
+export const ADD_GENRE= 'ADD_GENRE';
+export const DELETE_GENRE = 'DELETE_GENRE';
+export const CLEAR_GENRE = 'CLEAR_GENRE';
 
 

@@ -25,6 +25,7 @@ app.use('/api/profile', require('./routes/profile'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/books', require('./routes/books'));
 app.use('/api/authors', require('./routes/authors'));
+app.use('/api/genres', require('./routes/genres'));
 
 // listen to our server
 const PORT = process.env.PORT || 5000;

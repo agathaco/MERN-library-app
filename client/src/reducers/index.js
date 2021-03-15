@@ -4,6 +4,7 @@ import auth from './auth';
 import profile from './profile';
 import authors from './author';
 import books from './book';
+import genres from './genre';
 import search from './search';
 
 export default combineReducers({
@@ -12,5 +13,6 @@ export default combineReducers({
   profile,
   authors,
   books,
+  genres,
   search
 });

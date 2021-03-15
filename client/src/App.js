@@ -18,6 +18,9 @@ import AddEditAuthor from "./components/authors/AddEditAuthor";
 import Books from "./components/books/Books";
 import Book from "./components/books/Book";
 import AddEditBook from "./components/books/AddEditBook";
+import Genres from "./components/genres/Genres";
+import Genre from "./components/genres/Genre";
+import AddEditGenre from "./components/genres/AddEditGenre";
 
 import setAuthToken from './utils/setAuthToken';
 import { loadUser } from './actions/auth';
@@ -60,6 +63,10 @@ const App = () => {
               <PrivateRoute exact path="/books/:id" component={Book} />
               <PrivateRoute exact path="/books/edit/:id" component={AddEditBook} />
               <PrivateRoute exact path="/new-book" component={AddEditBook} />
+              <PrivateRoute exact path="/genres" component={Genres} />
+              <PrivateRoute exact path="/genres/:id" component={Genre} />
+              <PrivateRoute exact path="/genres/edit/:id" component={AddEditGenre} />
+              <PrivateRoute exact path="/new-genre" component={AddEditGenre} />
               <Route component={NotFound} />
             </Switch>
           </section>

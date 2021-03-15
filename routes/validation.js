@@ -36,7 +36,15 @@ const newBookValidation = (data) => {
   return schema.validate(data)
 }
 
+const newGenreValidation = (data) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+  }).unknown()
+  return schema.validate(data)
+}
+
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.newAuthorValidation = newAuthorValidation;
 module.exports.newBookValidation = newBookValidation;
+module.exports.newGenreValidation = newGenreValidation;
