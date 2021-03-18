@@ -26,6 +26,16 @@ const Genre = ({
       ) : (
         <Fragment>
           <h2>{genre.name}</h2>
+          <div className="books">
+          <h3>Books</h3>
+          {genre.books.map((book, index) => (
+            <div key={index}>
+              <Link to={`/books/${book._id}`}>
+                {book.title} - {book.author.name}
+              </Link>
+            </div>
+          ))}
+        </div>
           <Link to={`/genres/edit/${genre._id}`}>Edit</Link>
           <button onClick={handleGenreDelete}>Delete</button>
           <Link to="/genres">Back to Genres</Link>

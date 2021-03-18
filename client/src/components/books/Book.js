@@ -20,8 +20,8 @@ const Book = ({ getBookById, deleteBook, books:{ book }, match, history }) => {
     ) : (
     <Fragment>
       <h2>{book.title}</h2>
-      <h3>By {book.author}</h3>
-      <p>{book.genre}</p>
+      <h3>By <Link to={`/authors/${book.author._id}`}>{book.author.name}</Link></h3>
+      <p><Link to={`/genres/${book.genre._id}`}>{book.genre.name}</Link></p>
       <p>{book.description}</p>
       <Link to={`/books/edit/${book._id}`}>Edit</Link>
       <button onClick={handleBookDelete}>Delete</button>
@@ -39,6 +39,7 @@ Book.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  console.log(state.book)
   return {
     books: state.books
   }

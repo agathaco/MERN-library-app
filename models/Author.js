@@ -8,7 +8,11 @@ const AuthorSchema = new mongoose.Schema({
   bio: String,
   genre: String,
   country: String,
-  website: String
+  website: String,
+  books: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Book'
+  }]
 })
 
 module.exports = mongoose.model('Author', AuthorSchema);

@@ -23,8 +23,10 @@ router.get("/", async (req, res) => {
 // @access   Public
 router.get("/:id", async (req, res) => {
   try {
-    const author = await Author.findById(req.params.id);
-
+    const author = await Author.findById(req.params.id).populate({
+      path: 'books',
+      model: 'Book'
+   });
     if (!author) {
       return res.status(404).send("Author not found");
     }
@@ -78,9 +80,14 @@ router.delete("/:id", verifyToken, async (req, res) => {
       return res.status(404).send("Author not found");
     }
 
-    await author.remove();
+    if (author.books.length) {
+      return res.status(403).send("You cannot delete this author because it has been assigned to at least one book")
+    } else {
+      await author.remove();
+      res.send("Author has been removed");
+    }
 
-    res.send("Author has been removed");
+    
   } catch (err) {
     console.error(err.message);
     if (err.kind === "ObjectId") {

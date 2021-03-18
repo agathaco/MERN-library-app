@@ -23,7 +23,14 @@ router.get("/", async (req, res) => {
 // @access   Public
 router.get("/:id", async (req, res) => {
   try {
-    const genre = await Genre.findById(req.params.id);
+    const genre = await Genre.findById(req.params.id).populate({
+      path: 'books',
+      model: 'Book',
+      populate: {
+        path: 'author',
+        model: 'Author'
+      } 
+   });
 
     if (!genre) {
       return res.status(404).send("Genre not found");
@@ -75,10 +82,13 @@ router.delete("/:id", verifyToken, async (req, res) => {
     if (!genre) {
       return res.status(404).send("Genre not found");
     }
+    if (genre.books.length) {
+      return res.status(403).send("You cannot delete this genre because it has been assigned to at least one book")
+    } else {
+      await genre.remove();
+      res.send("Genre has been deleted");
+    }
 
-    await genre.remove();
-
-    res.send("Genre has been deleted");
   } catch (err) {
     console.error(err.message);
     if (err.kind === "ObjectId") {

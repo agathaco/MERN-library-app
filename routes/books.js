@@ -54,7 +54,7 @@ router.get("/", async (req, res) => {
 // @access   Public
 router.get("/:id", async (req, res) => {
   try {
-    const book = await Book.findById(req.params.id);
+    const book = await Book.findById(req.params.id).populate("author").populate("genre");
     if (!book) return res.status(404).send("Book not found");
     res.send(book);
   } catch (err) {
@@ -88,35 +88,50 @@ router.post("/", verifyToken, async (req, res) => {
       coverImage,
     } = req.body;
 
-    let authorId = author.value;
-    let genreId = genre.value;
+    let authorId = author.__isNew__ ?  null : author.value;
+    let genreId = genre.__isNew__ ?  null : genre.value;
+    const bookId = id ? id : new mongoose.Types.ObjectId();
 
-    // CHECK IF AUTHOR IS NEW
-    if (author.__isNew__) {
-      const bookAuthor = await Author.findOne({ name: author.label })
+    // Check if author is new and store book id
+    const bookAuthor = await Author.findOne({ _id: authorId })
+    try {
       if (!bookAuthor) {
         const newAuthor = new Author({
-          name: author.label
+          name: author.label,
+          books: [bookId]
         })
         authorId = newAuthor._id;
-        newAuthor.save()
+        newAuthor.save();
+      } else {
+        if (!bookAuthor.books.includes(bookId)) bookAuthor.books.unshift(bookId)
+        bookAuthor.save();
       }
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("A server error occured");
     }
 
-    // CHECK IF GENRE IS NEW
-    if (genre.__isNew__) {
-      const bookGenre = await Genre.findOne({ name: genre.label })
+    // Check if genre is new and store book id
+    const bookGenre = await Genre.findOne({ _id: genreId })
+    try {
       if (!bookGenre) {
         const newGenre = new Genre({
-          name: genre.label
+          name: genre.label,
+          books: [bookId]
         })
         genreId = newGenre._id;
-        newGenre.save()
+        newGenre.save();
+      } else {
+        if (!bookGenre.books.includes(bookId)) bookGenre.books.unshift(bookId)
+        bookGenre.save();
       }
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("A server error occured when saving genre");
     }
 
     const bookFields = {
-      id,
+      id: bookId,
       title,
       author: authorId,
       genre: genreId,
@@ -124,8 +139,6 @@ router.post("/", verifyToken, async (req, res) => {
       publishDate,
       coverImage,
     };
-
-    const bookId = id ? id : new mongoose.Types.ObjectId();
     const savedBook = await Book.findOneAndUpdate(
       { _id: bookId },
       { $set: bookFields },

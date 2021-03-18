@@ -30,12 +30,12 @@ const AddEditBook = ({
       fields.forEach((field) => {
         if (field === "author") {
           const currentAuthor = authorOptions.find(
-            (authorOption) => authorOption.value === book.author
+            (authorOption) => authorOption.value === book.author._id
           );
           setValue(field, currentAuthor);
         } else if (field === "genre") {
           const currentGenre = genreOptions.find(
-            (genreOption) => genreOption.value === book.genre
+            (genreOption) => genreOption.value === book.genre._id
           );
           setValue(field, currentGenre);
         } else {
